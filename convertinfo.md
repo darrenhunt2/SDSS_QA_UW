@@ -12,7 +12,7 @@ Flat fields in astronomy are used to correct observational images for error due 
 
 ### Column default : 2952
 
-Although there is an option to provide a user-chosen column, the default is set to 2952. This column is chosen for the master flat currently used in the south, asRaw-24960049.fits. This column is (likely) selected based on a location determined to be ideal based on a few factors: away from pixels on the image edges, where we will see strange visual effects; away from any chip gaps (the spectrograph CCD has an R, G, and B chip for a total of three, with small gaps in between each).
+Although there is an option to provide a user-chosen column, the default is set to 2952. This column is chosen for the master flat currently used in the south, asRaw-24960049.fits, where are 300 fibers are detected. This column is (likely) selected based on a location determined to be ideal based on a few factors: away from pixels on the image edges, where we will see strange visual effects; away from any chip gaps (the spectrograph CCD has an R, G, and B chip for a total of three, with small gaps in between each).
 
 See colchecker.py code and documentation for a visual comparison of randomly selected columns across a flat image.
 
