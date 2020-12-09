@@ -2,13 +2,16 @@
 This script will convert values along a specified column of a fits file into
 a .dat file of values.
 
-Run from command line:
+Run from command line with defaults:
 convertfits.py "flatname.fits"
-
 The default column for the SDSS master flat is 2952. This column can be changed
 by specifying a different integer at the command line.
 
+Run value check from command line:
+converfits.py "newcol.dat" col# "mastercol.dat"
+
 Author: Darren Hunt, University of Washington
+See convertinfo.md for more details
 """
 
 import sys
@@ -42,6 +45,8 @@ class Converter:
             Full name of the flat file to convert, must be a .fits file
         col : int (optional, default=2952)
             Columm to pull data from. For SDSS master flat, col=2952
+
+        #TODO : error exceptions for main function
         """
 
         flat = fits.getdata(self.f)  # retrieve data from input fits image
@@ -54,8 +59,8 @@ class Converter:
             out.write(decimal + str("\n"))
         out.close()
 
-    def equivalency(self,m):
-        """Compares .dat files for equivalency, can be used to determine if
+    def value_checker(self,m):
+        """Compares all values in both .dat files for equivalency, can be used to determine if
             there is user error in col parameter input. Converts all values to integers
             for comparison.
 
@@ -63,6 +68,9 @@ class Converter:
         ----------
         m : str
             Master .dat file to compare new .dat file values to
+
+        #TODO : error exceptions for value checker. Currently only runs if a value
+                for col is user specified
         """
         # replace the file extension from .fits to .dat
         valf = np.float64(np.loadtxt(self.f.rsplit('.',1)[0]+str(".dat")))
@@ -74,7 +82,7 @@ if __name__ == "__main__":
     if len(sys.argv) == 4:  # only if running equivalency function
         c = int(sys.argv[2])
         m = str(sys.argv[3])
-        Converter(f,c).equivalency(m)
+        Converter(f,c).value_checker(m)
     elif len(sys.argv) == 3:  # if running with non-default column
         c = int(sys.argv[2])
         Converter(f,c).main()
