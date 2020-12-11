@@ -5,6 +5,7 @@ Adapted from IDL code written by : Nathan De Lee, NKU
 
 Usage : run from command line
 brightline1d.py "ref.fits" filepattern
+
 For details, see blinfo.md
 """
 
@@ -15,14 +16,15 @@ from astropy.io import fits
 
 class Brightline:
     """
-    A class for
+    A class for comparing a reference flat image to a set of flats or sciences to
+    determine a decrease in brightness and performance.
 
     Attributes
     ----------
     ref : str
         String of the master fits flat file name
     filepattern : str
-        String of similarly named fits files for comparison to ref flat and
+        String of similarly named fits files for comparison to ref flat
 
     """
 
@@ -38,26 +40,29 @@ class Brightline:
 
     def main(self):
         """
-        The brighline1d function
+        The brighline1d function takes in a reference flat image such as a master
+        flat where all fibers are detected, and compares it to a set of science or
+        flat images for a decrease in brightness. The ratio of the fiber flux to the
+        reference fiber flux is used to determine if a fiber is missing, faint, or
+        performing as expected.
+
+        Ratio < 3 : fiber is missing
+        Ratio >= 3 and < 0.7 : fiber is faint
+        Ratio > 0.7 : fiber is good
 
         Returns
         -------
-        missingFarray :
+        missingFarray : int arr
             Array of fibers with ratio less than 0.3 compared to master flat
-        faintFarray :
+        faintFarray : int arr
             Array of fibers with ratio between 0.3 and 0.7 compared to master flat
-        goodFarray :
+        goodFarray : int arr
             Array of fibers with ratio above 0.7 compared to the master flat
         """
 
-        # files to write percent differences, ratios, and mtp perdiffs and ratios to
-        fib_per = open('fiber_per.out', 'w')
-        fib_ratio = open('fiber_ratio.out', 'w')
-        fib_mtp = open('fiber_mtp.out', 'w')
-
         files = glob.glob(self.filepattern)
         refimage = fits.getdata(self.ref).astype(np.int32)
-        # exception if user input files not found
+        # error if user input files not found
         if len(files) < 1:
             sys.exit("No files found.")
         elif len([refimage]) < 1:
@@ -66,53 +71,35 @@ class Brightline:
         for i in range(len(files)):
             img = fits.getdata(files[i]).astype(np.int32)
 
-            out = open("output.out", 'w')  # machine readable
-            txt = open("output.txt", 'w')  # text version
+            fib = open("fibers.txt", 'w')  # text file of all fibers classified by brightness ratio
+            txt = open("output.txt", 'w')  # text file of all fiber details
             for j in range(300):
-                flux = np.median(img[299-j,:])   # fibers are reversed in 1d images
-                                                    # compared to raw images
+                # fibers are reversed in 1d images compared to raw images
+                flux = np.median(img[299-j,:])
                 refflux = np.median(refimage[299-j,:])
-                ratio[j] = flux[j] / refflux[j]    # compares input img flux to
-                                                # master flat flux for the same fiber
+
+                # compares input img flux to master flat flux for the same fiber
+                ratio = flux / refflux
                 # calculate percent difference from reference
-                perdiff = (flux[j] - refflux[j]) / refflux[j] * 100
+                perdiff = ((flux - refflux) / refflux) * 100
 
-                out.write(flux[j], refflux[j], ratio[j], perdiff[j])
                 txt.write("Fiber no. {}; flux : {}, refflux : {}, ratio : {}, perdiff : {}".format(j,
-                            flux[j], refflux[j], ratio[j], perdiff[j])+"/")
-                txt.close(), out.close()
+                            flux, refflux, ratio, perdiff)+"\n")
 
-                # classify fibers as missing, faint, or good based on flux
-                if ratio[j] < 0.2:
-                    missingFarray = (int(j+1))
-                elif (ratio[j] >= 0.2) and (ratio[j] < 0.7):
-                    faintFarray = (int(j+1))
-                else:
-                    goodFarray = int(j+1)
+            # classify fibers as missing, faint, or good based on flux
+            if ratio < 0.2:
+                missingFarray = (int(j+1))
+            elif (ratio >= 0.2) and (ratio < 0.7):
+                faintFarray = (int(j+1))
+            else:
+                goodFarray = int(j+1)
 
-                sortmin = np.sort(flux)
-                print("Three Lowest Flux Fibers: ", filelist[i])
-                for k in range(3):
-                    print(sortmin[k]+1, ":", flux[sortmin[0]])
+            print("Median Ratio ", j, np.median(ratio))
+            print("Median Percent Difference ", j, np.median(perdiff))
 
-                print("Median Ratio", np.median(ratio))
-                print("Median Percent Difference", np.median(perdiff))
-                print("Median Ratio Percent Difference")
-                for k in range(0, 9):
-                    mtpratio[k] = np.median(ratio[0 + 30 * k:29 + 30 * k])
-                    mtpdiff[k] = np.median(perdiff[0 + 30 * k:29 + 30 * k])
-                    k = k + 1
-                    print("MTP:", mtpratio[k], mtpdiff[k])
-
-                # print machine readable output file
-                fib_per.write(filelist[i], ratio)
-                fib_ratio.write(filelist[i], perdiff)
-                fib_mtp.write(filelist[i], mtpratio, mtpdiff)
-
-                return missingFarray, faintFarray, goodFarray
-        fib_per.close()
-        fib_ratio.close()
-        fib_mtp.close()
+            fib.write("Missing : "+str(missingFarray)+"\n Faint : "+str(faintFarray)+"\n Good : "+str(goodFarray))
+            return missingFarray, faintFarray, goodFarray
+        fib.close(), txt.close()
 
 if __name__ == "__main__":
     r,f  = str(sys.argv[1]), str(sys.argv[2])
