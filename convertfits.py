@@ -3,12 +3,15 @@ This script will convert values along a specified column of a fits file into
 a .dat file of values.
 
 Run from command line with defaults:
-convertfits.py "flatname.fits"
-The default column for the SDSS master flat is 2952. This column can be changed
-by specifying a different integer at the command line.
+convertfits.py <"flatname.fits">
+
+The default column for the SDSS master flat asRaw-24960049.fits
+is 2952. This column can be changed by specifying a different integer
+at the command line:
+convertfits.py <"flatname.fits"> <col>
 
 Run value check from command line:
-converfits.py "newcol.dat" col# "mastercol.dat"
+converfits.py <"newcol.dat"> <col> "<mastercol.dat">
 
 Author: Darren Hunt, University of Washington
 See convertinfo.md for more details
@@ -16,18 +19,20 @@ See convertinfo.md for more details
 
 import sys
 import numpy as np
+import re
 from astropy.io import fits
 
 class Converter:
     """
-    A class for fits conversion and manipulation.
+    A class for .fits conversion along a single column into a .dat file in order
+    to reduce number of dimensions when working with comparative fits data.
 
     Attributes
     ----------
     f : str
         Full name of the flat file to convert, must be a .fits file
     col : int
-        Columm to pull data from. For SDSS master flat, col=2952
+        Columm to pull data from. For SDSS master flat, default col=2952
     """
 
     def __init__(self,f,col=None):
@@ -37,7 +42,7 @@ class Converter:
         else: self.col = col
 
     def main(self):
-        """Prints to a .dat file with values along specified column
+        """Prints to a .dat file with values along specified column.
 
         Parameters
         ----------
@@ -51,7 +56,7 @@ class Converter:
 
         flat = fits.getdata(self.f)  # retrieve data from input fits image
         w = flat.shape[0]  # get width of chip from the image size
-        out = open((self.f.rsplit('.',1)[0]+".dat"), 'w')  # name output file after input flat string, without .fits ext
+        out = open(re.split(r'[-.]',f)[1]+".dat", 'w')  # name output file after exposure #, without .fits ext
 
         for i in range(w):
             data = flat[(w-1)-i,self.col]  # pulls the relevant value along specified column for each pixel on the chip
