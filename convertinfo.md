@@ -20,7 +20,13 @@ Dome flat sequences of a uniformly illuminated field of view are taken periodica
 
 Although in convertfits.py there is an option to input a specified column, the default is set to 2952. This column is uniquely chosen for the current master flat. This column is likely selected based on its spatial location: away from pixels on the image edges, and away from any chip gaps. The spectrograph CCD has an R, G, and B chip for a total of three observational detectors with small gaps in between each, and 3 additional 512x2048 reference chips to identify any instrument errors. (Nidever et al., 2015) Avoiding the gaps reduces any zero or atypical pixel values.
 
-See colchecker.py code and documentation for a visual comparison of 10 randomly selected columns across a flat image.
+See colchecker.py code for a visual comparison of randomly selected columns across a flat image.
+
+### colchecker.py and .ipynb
+
+colchecker runs similarly to convertfits.py, but pulls data along a column to plot it and does not print to an output file. Using the master flat, colchecker plots the values of the 2048 pixels along randomly selected columns across the image within a range of (0,8192). Currently, 5 random columns are plotted at a time per figure, in addition to the line for column 2952.
+
+The values across the image's columns follow a general trend (pix value around ~2000), and outliers of very high values deviating above the average, or negative values dipping far below, display visible spikes across the plot. This helps determine which columns are ideal (or not) to use as reference values if they stray too far from the expected value range.
 
 ## Usage
 
