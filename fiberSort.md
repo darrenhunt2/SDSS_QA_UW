@@ -38,7 +38,7 @@ If .csv files from the mountain code are provided, the flux_plotter function wil
 
 An example of a scatterplot for exposure 32380009-a:
 
-![Scatterplot example](/plots/32380009.png)
+![Scatterplot example](/plots/a-32380009.png)
 
 ## Usage
 
@@ -55,6 +55,10 @@ Run main sorter function and plotter from the command line:
 fiberSort.py "<ref.fits>" "<filepattern>" "<testout.csv>"
 
 Will save a .png for each exposure. Length of fits file list and length of csv file list must match.
+
+### Error checks
+
+fiberSort currently checks that input files are .fits only, that there is at least one comparative flat and one reference flat, and when using the plotter function, there are an equivalent number of .csv files to .fits files read in.
 
 ## Future improvements
 
