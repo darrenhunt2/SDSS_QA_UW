@@ -52,7 +52,7 @@ This writes each ratio flux to a .csv file, and a .txt file with missing and fai
 
 Run main sorter function and plotter from the command line:
 
-fiberSort.py "ref.fits>" "<filepattern" "testout.csv"
+fiberSort.py "ref.fits" "filepattern" "testout.csv"
 
 Will save a .png for each exposure. Length of fits file list and length of csv file list must match.
 
