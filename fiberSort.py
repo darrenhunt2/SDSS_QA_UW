@@ -3,6 +3,7 @@
 Previously called : brightline1d.py
 Author : Darren Hunt, University of Washington
 Adapted from IDL code written by : Nathan De Lee, NKU
+Edited by : Jennifer Sobeck, University of Washington
 
 Usage : run from command line
 fibersort.py "<ref.fits>" <filepattern>
@@ -15,7 +16,6 @@ For details, see fiberSort.md
 
 import sys
 import glob
-import re  # file naming
 import numpy as np
 from astropy.io import fits
 from astropy.time import Time
@@ -45,7 +45,7 @@ class FiberSort:
             pass
         else: sys.exit("Error : All files must be .fits only")
 
-        # error if user input files not found
+        # check if user input files not found
         if len(glob.glob(self.ref)) < 1:
             sys.exit("No reference flat found.")
         elif len(glob.glob(self.filepattern)) < 1:
@@ -66,19 +66,19 @@ class FiberSort:
 
         Returns
         -------
-        ratio : float
+        r : float
             Array containing ratio values for 300 fibers
         """
 
         files = glob.glob(self.filepattern)
         refimage = fits.getdata(self.ref).astype(np.int32)
         r = []
-        for i in range(len(files)):
+        for i in range(len(files)):  # repeat for each input image
             img = fits.getdata(files[i]).astype(np.int32)
             missingFarray, faintFarray, ratarr = [], [], []
-            ff = open(re.split(r'[-.]',files[i])[2]+"-"+str(i)+".csv", 'w')  # file to write flux ratio values to
+            ff = open(str(files[i][5:15])+".csv", 'w')  # file to write flux ratio values to
 
-            for j in range(300):
+            for j in range(300):  # 300 fibers per image
                 # fibers are reversed in 1d images compared to raw images
                 flux = np.median(img[299-j,:])
                 refflux = np.median(refimage[299-j,:])
@@ -97,7 +97,7 @@ class FiberSort:
             # return fluxes to use in plotter function
             r.append(ratarr)
             # print array of faint and missing fibers
-            with open(re.split(r'[-.]',files[i])[2]+"-"+str(i)+".txt",'w') as o:
+            with open(str(files[i][5:15])+".txt", 'w') as o:
                 o.write(str(missingFarray)+";"+str(faintFarray))
 
         return np.asarray(r)
@@ -139,7 +139,7 @@ class FiberSort:
             ax.tick_params(labelsize=16), ax.set_ylim(-0.1,2)  # cut off anything above a flux ratio of 2
 
             ax.scatter(x,mtn,marker='s',label='Mountain output, raw imgs',color='b')  # raw image/mountain output
-            ax.scatter(x,flux,marker='o',label='fiberSort output, reduced imgs',color='r')  # this code's output from main
+            ax.scatter(x,flux,marker='o',label='fiberSort output, reduced imgs',color='r',alpha=0.6)  # this code's output from main
 
             # missing and faint threshold lines. any fiber below these lines is missing/faint. above=OK.
             ax.plot(x,np.full((300),0.3),linestyle='--',linewidth=3,color='black')
@@ -148,7 +148,7 @@ class FiberSort:
             plt.text(2,0.65,"Faint",fontsize=14)
 
             ax.legend(loc='best',fontsize=18)
-            plt.savefig(((re.split(r'[-.]',ims[i])[2])+".png"),dpi=300,overwrite=True)
+            plt.savefig((str(ims[i][5:15])+".png"),dpi=300,overwrite=True)
 
 if __name__ == "__main__":
     if len(sys.argv) == 1 or len(sys.argv) == 2:
