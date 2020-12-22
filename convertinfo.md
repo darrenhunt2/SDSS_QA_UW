@@ -22,32 +22,43 @@ Although in convertfits.py there is an option to input a specified column, the d
 
 See colchecker.py code for a visual comparison of randomly selected columns across a flat image.
 
-### colchecker.py and .ipynb
+## colchecker.py and .ipynb
 
-colchecker runs similarly to convertfits.py, but pulls data along a column to plot it and does not print to an output file. Using the master flat, colchecker plots the values of the 2048 pixels along randomly selected columns across the image within a range of (0,8192). Currently, 5 random columns are plotted at a time per figure, in addition to the line for column 2952.
+colchecker pulls data along a column to plot it and does not print to an output file. Using the master flat, colchecker plots the values of the 2048 pixels along randomly selected columns across the image within a range of (0,8192). Currently, 5 random columns are plotted at a time per figure.
 
-The values across the image's columns follow a general trend (pix value around ~2000), and outliers of very high values deviating above the average, or negative values dipping far below, display visible spikes across the plot. This helps determine which columns are ideal (or not) to use as reference values if they stray too far from the expected value range.
+The values across the image's columns follow a general trend where most intensity values for a single column are relatively consistent (near the same pix value). Outliers of very high values deviating far above the average, or negative values dipping far below, display visible spikes across the plot. This may help determine which columns are ideal (or not) to use as reference values if they stray too far from the expected value range. The reasoning for these extreme spikes is beyond the scope of the current project goals but are a point for QA consideration in the future.
+
+colchecker.py currently has one basic error check for too many input files.
 
 ## Usage
 
 To convert the default column 2952 from a flat image into a .dat file, run from the command line:
 
-convertfits.py <"flatexp.fits">
+convertfits.py "flatexp.fits"
 
 To convert all values along any one column in the range of (0,8192) for SDSS images, run from the command line:
 
-convertfits.py <"flatexp.fits"> <col>
+convertfits.py "flatexp.fits" col
+
+To graphically inspect pixel intensities for randomly selected columns across the reference flat, run from the command line:
+
+colchecker.py
+
+To graph random columns for a different flat, run from the command line:
+
+colchecker.py "flatexp.fits"
 
 ### Value checker function
 
 The value_checker function compares every line in a .dat file to another for equivalency. This does not run by default, but can be used to double check that all values match an existing .dat file. To use the value_checker, run from the command line:
 
-convertfits.py <"flat.dat"> <col> <"mastercol.dat">
+convertfits.py "flat.dat" col "mastercol.dat"
 
 ### Future improvements
 
 - Improved command line interaction with exceptions and user prompts to input correct file type (.fits or .dat) and to provide a column value only within the range of the input image.
 - Fix value_checker to run without specifying column number, currently cannot run without specifying all three input parameters.
+- Improvement of colchecker.py plotting methods for efficiency.
 
 ## Citations
 
