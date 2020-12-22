@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <title>Vignetting Report for APOGEE-2S</title>
+    <link rel="stylesheet" type="text/css" href="vstyle.css">
+  </head>
+
+  <body>
+    <h1>Vignetting Report for APOGEE-2S</h1>
+    <h5>Darren Hunt, Jennifer Sobeck - University of Washington, December 2020</h5>
+
+    <div>
+    <h3>SDSS-IV: Surveys and Instrumentation</h3>
+    <p>
+      The Sloan Digital Sky Survey (SDSS-IV) is a dual-hemisphere astronomical
+      survey studying and mapping all aspects of the Milky Way galaxy and universe. SDSS-IV
+      collects data with multiple telescopes between two observatories; Apache Point Observatory
+      (APO) in the northern hemisphere, and Las Campanas Observatory (LCO) in the south.
+      SDSS-IV is comprised of three active surveys: MaNGA (Mapping Nearby Galaxies at APO),
+      collecting spectral data on galaxies to understand their life cycles and processes;
+      eBOSS (Extended Baryon Oscillation
+      Spectroscopic Survey), a cosmology survey observing galaxies and high energy
+      quasars to better understand the universe's structure and dynamics; APOGEE-2 (APO Galactic
+      Evolution Experiment 2), the next generation of SDSS's Milky Way survey, collecting
+      spectroscopic data from stars within our galaxy to examine the Milky Way's physical
+      structure and kinematic processes. APOGEE-2 is a high resolution (R ~ 22,500),
+      near-infrared (wavelength range: 1.51-1.70 micrometers) spectrograph at the
+      APO observatory. The LCO telescope has a duplicated version of this spectrograph.
+    </p>
+    <p>
+      SDSS-IV surveys have the unique ability to collect data on multiple objects simultaneously,
+      while many other telescopes historically have not had this capability. This is achieved by
+      using fiber optic cables and 'plug plates', specially-machined circular plates with precisely
+      drilled holes where fibers plug in and collect light. The holes on each plate line up with pre-selected
+      observational targets and points for calibration. Each survey uses a different number of fibers, with
+      300 total used in APOGEE-2. Three types of fibers collect data while observing for APOGEE-2S: target
+      (250 fibers), telluric calibration to subtract atmospheric effects (15 fibers), and sky calibration (35 fibers).
+    </p>
+    <p>
+      Observations for APOGEE-2 in the south use the 2.5 meter du Pont telescope at LCO. The differences
+      between the du Pont telescope and the Sloan 2.5 meter at APO become critical in a discussion
+      of vignetting, the focus of this discussion.
+    </p>
+    </div>
+
+    <div>
+    <h3>Vignetting at the du Pont Telescope</h3>
+      <p>
+        Vignetting is a reduction in expected brightness near the outer edges of the
+        telescope's field of view (FOV). This decrease can result from the telescope
+        optics, or potentially other causes such as poor fiber performance. For the
+        APOGEE-2 surveys, vignetting is a problem only in southern observations.
+      </p>
+      <p>
+        The du Pont telescope was built in the 1970s, years before specialized planning
+        and construction of survey telescopes existed. The Sloan 2.5 meter, built in the
+        1990s, has a 3 degree field of view and an optics system designed with the goals
+        of galactic surveys in mind. Sloan's FOV, f-ratio, and mirror system were optimized
+        with the intention of collecting high-volume spectroscopic data. This is not the
+        case for the du Pont. With a smaller FOV at 2.1 degrees and less optical corrections
+        for distortion, APOGEE-2S data experiences vignetting, while the north observations
+        do not. Therefore, quality assurance of southern data must incorporate the effects of
+        vignetting in data reduction.
+      </p>
+
+    <h4>Significance of Vignetting</h4>
+    <p>
+      The decrease in brightness around a field's edges means outer fiber fluxes are
+      smaller than expected, and therefore reported magnitudes will be less than the object's
+      true value unless corrected for. Targets near the field's center may yield accurate
+      magnitude data, while outer targets may have inconsistent or varying measurements.
+      For a massive stellar survey such as APOGEE-2, the integrity of the data is then challenged.
+      If target magnitudes and other calculations deviate much farther than anticipated,
+      results dependent on affected APOGEE-2S data could be questionable. Though there are other
+      sources of poor data quality such as decreased fiber performance or guide fiber
+      inconsistencies, vignetting is a point of concern for the south's spectroscopic data.
+    </p>
+
+    <h4>Potential Project Path for Vignetting Quality Assurance</h4>
+    <p>
+      Given a longer-term time frame, a project investigating the extent of vignetting effects in
+      APOGEE-2S data would likely begin with examining spatial magnitude deviation plots. Spatial magnitude deviation
+      plots, which color-code each fiber's flux with respect to an expected baseline, map out the
+      plug plate's field of view. These plots are available per exposure series
+      for a given MJD and plate, along with additional plots from calibration fibers. As a starting point,
+      we might use these to identify general trends for magnitudes below expected value by night.
+    </p>
+
+    <figure>
+      <img class="center" alt="Spatial Mag Deviation Plot 1"  src="ap1D-12560018.jpg">
+      <figcaption>Spatial magnitude deviation plot. Plate 7438, MJD 56818, exp 12560018. </figcaption>
+    </figure>
+
+    <p>
+      The above figure is a typical example of such plots. The colorbar indicates whether a particular
+      fiber's flux is below, at, or above its expected magnitude. Here, most target fibers are near baseline, especially towards
+      the center of the field. However, as we increase distance out from the center, several fibers right along
+      the outer edges (lower left and upper right) are between -0.15 and -0.50 less than expected. In this particular
+      exposure, it is mainly these outer fibers with a deviating magnitude. This is how we would expect vignetting to
+      arise in graphs of flux as a function of position on the plate. However, we would not be able to attribute this
+      to vignetting without further investigation. Following this initial examination, we would take the analysis
+      further to include additional parameters, in order to determine any other causes or contributors to low flux. Some
+      questions to consider are:
+    </p>
+      <ul>
+        <li>How does long-term fiber performance contribute to low-flux readings? Are there specific
+        fibers that have consistently lower-than-expected flux values at the edges? Is this still true
+        for the same fibers if they are positioned closer towards the center (i.e. not plugged near the FOV edges)?
+        Is this low flux reading due to a poorly performing fiber, vignetting, or a combination of both?</li>
+        <li>Do other parameters, such as cart, play significant roles in reduced edge flux readings? What does
+        this look like over time?</li>
+        <li>Are there other potential contributors, such as human plug error or weather, that could be the cause
+        instead of vignetting?</li>
+      </ul>
+
+    <p>
+      The first point in question draws in fiber performance projects, understanding how fibers perform by plate, night,
+      and over time. Understanding if it is vignetting rather than a bad fiber causing low fluxes, vice versa, or
+      stacked effect from the two will be important for both QA projects.
+    </p>
+
+    <figure>
+      <img class="center" alt="Spatial Mag Deviation Plot 2"  src="as1D-31460054.jpg">
+      <figcaption>Spatial magnitude deviation plot. Plate 11899, MJD 58708, exp 31460054. </figcaption>
+    </figure>
+
+    <p>
+      There are other areas of vignetting and spatial magnitude deviation to consider as well. This plot, for example,
+      shows a rather unexpected distribution of magnitudes, where half the fibers are significantly brighter than expected
+      while the other half is dimmer. To begin breaking this down to possible reasons, the night logs will become an
+      important tool. A Python script could batch parse logs or htmls and determine if this was simply a bad exposure
+      or noticeably bad weather. Once obvious causes are ruled out, more extensive data visualization would be the next step.
+      Advanced, interactive spatial magnitude deviation plotting would be a potential next step. Pulling out metadata
+      to look beyond position and flux may yield additional insight.
+    </p>
+
+    </div>
+
+    <div>
+    <h3>Future Considerations</h3>
+    <p>
+      - More advanced spatial magnitude variability plots with hover interactivity to provide
+      with metadata from each fiber within a given FOV.
+    </p>
+    </div>
+
+    <div>
+      <h3> Citations </h3>
+        <ol>
+          <li>Bowen, I. S., &amp; Vaughan, A. H. (1973). The Optical Design of the 40-in
+             Telescope and of the Irenee DuPont Telescope at Las Campanas Observatory, Chile.
+             Applied Optics, 12(7), 1430. doi:10.1364/ao.12.001430</li>
+           <li> Carnegie. (n.d.). The du Pont Telescope. Retrieved December 22, 2020, from https://obs.carnegiescience.edu/dupont </li>
+           <li>Gunn et al. (2006) The 2.5 m Telescope of the Sloan Digital Sky Survey.
+            The Astronomical Journal, Volume 131, Issue 4, pp. 2332-2359. doi:10.1086/500975 </li>
+          <li>SDSS. SDSS-IV: Current Surveys (2014-2020). (2020). Retrieved December 22, 2020, from https://www.sdss.org/surveys/</li>
+          <li>SDSS. Telescopes and Instruments. (2020). Retrieved December 22, 2020, from https://www.sdss.org/instruments/</li>
+        </ol>
+    </div>
+  </body>
+
+</html>

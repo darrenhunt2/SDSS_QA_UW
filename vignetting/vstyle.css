@@ -1,0 +1,28 @@
+figure {
+  font-family: Helvetica;
+  font-size: 18px;
+  text-align: center;
+  font-style: italic;
+  float: center;
+  margin-right: 5px;
+}
+
+p, ol, ul {
+  font-family: Helvetica;
+  margin-left: 25px;
+  margin-right: 25px;
+  font-size: 18px;
+  text-align: justify;
+}
+
+h1, h2, h3, h4, h5 {
+  font-family: Helvetica;
+  margin-left: 25px;
+}
+
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 20%;
+}
